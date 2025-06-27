@@ -90,7 +90,12 @@ class AppWindow():
     def Render(self):
         self.window.fill("black")
 
-        self.source.Render()
+        # Temporary
+        obstacles = []
+        obstacles.append(self.obstacle1)
+        obstacles.append(self.obstacle2)
+
+        self.source.Render(obstacles)
 
         self.obstacle1.Render()
         self.obstacle2.Render()

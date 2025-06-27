@@ -14,9 +14,9 @@ class SourceObject():
         self.rayLength = 200
 
     # Rendering
-    def Render(self):
+    def Render(self, obstacles):
         self.DrawCircle()
-        self.DrawRays()
+        self.DrawRays(obstacles)
 
         pygame.draw.circle(self.root, (0, 255, 0), self.position, self.circleRadius)
     
@@ -26,7 +26,9 @@ class SourceObject():
         self.circle.center = self.position
 
     # Draw rays
-    def DrawRays(self):
+    def DrawRays(self, obstacles):
+        _linesCoordinates = []
+
         angleBetween = math.radians(360 / self.rayAmount)
 
         for i in range(0, self.rayAmount):
@@ -39,3 +41,14 @@ class SourceObject():
             # _newRayY = lastRayX * math.sin(math.radians(currentAngle)) + lastRayY * math.cos(math.radians(currentAngle))
 
             pygame.draw.line(self.root, (255, 0, 255), self.circle.center, (_newRayX, _newRayY), 4)
+            _linesCoordinates.append((_newRayX, _newRayY))
+
+        self.CollisionDetection(obstacles, _linesCoordinates)
+
+    # Detect collissions
+    def CollisionDetection(self, obstacles, lines):
+        for obstacle in obstacles:
+            for line in lines:
+                _clippedCords = obstacle.rect.clipline(self.circle.center, line)
+                if _clippedCords:
+                    print(_clippedCords)
