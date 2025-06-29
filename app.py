@@ -82,9 +82,9 @@ class AppWindow():
             self.source.position = (0, self.window.get_height())
         if pygame.mouse.get_pos()[0] < 0 and pygame.mouse.get_pos()[1] < 0:
             self.source.position = (0, 0)
-
+            
         # Debug
-        print(pygame.mouse.get_pos())
+        # print(pygame.mouse.get_pos())
 
     # Rendering
     def Render(self):
