@@ -1,5 +1,6 @@
+from config import Config
 from app import AppWindow
 
 if __name__=="__main__":
-    app = AppWindow()
-    app.Run()
+    config = Config()
+    AppWindow(config)

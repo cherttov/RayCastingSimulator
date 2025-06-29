@@ -2,12 +2,15 @@ import pygame
 import math
 from obstacle import Obstacle
 from source_object import SourceObject
+from config import Config
 
 
 # Application main
 class AppWindow():
     # Constructor
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
+
         pygame.init()
         self.window = pygame.display.set_mode((640, 460))
         self.clock = pygame.time.Clock()
@@ -18,11 +21,10 @@ class AppWindow():
         # Initialize Source
         self.sourcePosition = (300, 200)
         self.sourceRadius = 15
-        self.source = SourceObject(self.window, self.sourceRadius, self.sourcePosition)
+        self.source = SourceObject(self.window, self.sourceRadius, self.sourcePosition, config)
 
         # Initialize obstacles
-        self.obstacle1 = Obstacle(self.window, [40, 40, 80, 80])
-        self.obstacle2 = Obstacle(self.window, [120, 120, 140, 140])
+        self.obstacles = [Obstacle(self.window, rect) for rect in self.config.obstacleDefinition]
 
         self.Run()
     
@@ -82,7 +84,7 @@ class AppWindow():
             self.source.position = (0, self.window.get_height())
         if pygame.mouse.get_pos()[0] < 0 and pygame.mouse.get_pos()[1] < 0:
             self.source.position = (0, 0)
-            
+
         # Debug
         # print(pygame.mouse.get_pos())
 
@@ -90,14 +92,9 @@ class AppWindow():
     def Render(self):
         self.window.fill("black")
 
-        # Temporary
-        obstacles = []
-        obstacles.append(self.obstacle1)
-        obstacles.append(self.obstacle2)
+        self.source.Render(self.obstacles)
 
-        self.source.Render(obstacles)
-
-        self.obstacle1.Render()
-        self.obstacle2.Render()
+        for obstacle in self.obstacles:
+            obstacle.Render()
 
         pygame.display.flip()
