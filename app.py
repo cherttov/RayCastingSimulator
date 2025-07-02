@@ -85,6 +85,11 @@ class AppWindow():
         if pygame.mouse.get_pos()[0] < 0 and pygame.mouse.get_pos()[1] < 0:
             self.source.position = (0, 0)
 
+        # Updated limits - optimize a bit further before replacing it with this
+        # _positionLimitX = min(max(pygame.mouse.get_pos()[0], 0), self.window.get_width())
+        # _positionLimitY = min(max(pygame.mouse.get_pos()[1], 0), self.window.get_height())
+        # self.source.position = (_positionLimitX, _positionLimitY)
+
         # Debug
         # print(pygame.mouse.get_pos())
 

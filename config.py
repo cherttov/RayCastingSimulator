@@ -1,7 +1,7 @@
 class Config():
     def __init__(self):
         # Rays
-        self.rayAmount = 36
+        self.rayAmount = 60
         self.rayLength = 800
         self.rayColour = (255, 255, 255)
 
@@ -9,6 +9,7 @@ class Config():
         self.obstacleDefinition = [
             [40, 40, 80, 80],
             [120, 120, 140, 140]
+            #[70, 360, 400, 2]
         ]
     
     # @property
