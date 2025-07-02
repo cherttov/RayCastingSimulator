@@ -18,7 +18,6 @@ class SourceObject():
 
     # Rendering
     def Render(self, obstacles):
-        print(self.position)
         self.DrawCircle()
         self.DrawRays(obstacles)
 
@@ -47,39 +46,20 @@ class SourceObject():
             pygame.draw.line(self.window, self.rayColour, self.circle.center, newClippedRayXY, 1)
             
     # Detect & Process collision
-    def CollisionDetection(self, obstacles, _newRayX, _newRayY):
-        # # Works partially
-        # for i in range(1, len(obstacles)):
-        #     _clippedCords1 = obstacles[i-1].rect.clipline(self.circle.center, (_newRayX, _newRayY))
-        #     _clippedCords2 = obstacles[i].rect.clipline(self.circle.center, (_newRayX, _newRayY))
-        #     if not _clippedCords1 and _clippedCords2:
-        #         break
-        #     elif not _clippedCords2:
-        #         if _clippedCords1:
-        #             return (_clippedCords1[0])
-        #     elif not _clippedCords1:
-        #         if _clippedCords2:
-        #             return (_clippedCords2[0])
-
-        #     if _clippedCords1 and _clippedCords2:
-        #         ggs1 = _clippedCords1[0][0]
-        #         ggs2 = _clippedCords1[0][1]
-        #         qqs1 = _clippedCords2[0][0]
-        #         qqs2 = _clippedCords2[0][1]
-        #         pos = self.position
-        #         idk1 = math.sqrt(((pos[0]-ggs1)**2)+((pos[1]-ggs2)**2))
-        #         idk2 = math.sqrt(((pos[0]-qqs1)**2)+((pos[1]-qqs2)**2))
-        #         print(_clippedCords1, _clippedCords2)
-        #         if idk1 < idk2:
-        #             return (_clippedCords1[0])
-        #         elif idk1 > idk2:
-        #             return (_clippedCords2[0])
-        #         else:
-        #             return (_newRayX, _newRayY)
-        # return (_newRayX, _newRayY)
-    
+    def CollisionDetection(self, obstacles, _newRayX, _newRayY): # still buged where it goes through 1 pixel
+        _lastClipped = ()
         for _obstacle in obstacles:
-            _clippedCords = _obstacle.rect.clipline(self.circle.center, (_newRayX, _newRayY))
-            if _clippedCords:
-                return (_clippedCords[0])
-        return (_newRayX, _newRayY)
+            _newClipped = _obstacle.rect.clipline(self.circle.center, (_newRayX, _newRayY))
+            if _newClipped:
+                _newClipped = _newClipped[0]
+                if not _lastClipped:
+                    _lastClipped = _newClipped
+                else:
+                    _lastDistance = math.sqrt(((_lastClipped[0]-self.circle.center[0])**2)+((_lastClipped[1]-self.circle.center[1])**2))
+                    _newDistance = math.sqrt(((_newClipped[0]-self.circle.center[0])**2)+((_newClipped[1]-self.circle.center[1])**2))
+                    if _newDistance < _lastDistance:
+                        _lastClipped = _newClipped
+        if _lastClipped:
+            return _lastClipped
+        else:
+            return (_newRayX, _newRayY)

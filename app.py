@@ -60,35 +60,12 @@ class AppWindow():
     
     # Dragging
     def Dragging(self):
-        # Set source position to mouse position
-        self.source.position = pygame.mouse.get_pos()
-
-        # Limits width (r, l)
-        if pygame.mouse.get_pos()[0] > self.window.get_width():
-            self.source.position = (self.window.get_width(), pygame.mouse.get_pos()[1])
-        if pygame.mouse.get_pos()[0] < 0:
-            self.source.position = (0, pygame.mouse.get_pos()[1])
-
-        # Limits height (u, d)
-        if pygame.mouse.get_pos()[1] > self.window.get_height():
-            self.source.position = (pygame.mouse.get_pos()[0], self.window.get_height())
-        if pygame.mouse.get_pos()[1] < 0:
-            self.source.position = (pygame.mouse.get_pos()[0], 0)
-
-        # Limits corners (br, tr, bl, tl)
-        if pygame.mouse.get_pos()[0] > self.window.get_width() and pygame.mouse.get_pos()[1] > self.window.get_height():
-            self.source.position = (self.window.get_width(), self.window.get_height())
-        if pygame.mouse.get_pos()[0] > self.window.get_width() and pygame.mouse.get_pos()[1] < 0:
-            self.source.position = (self.window.get_width(), 0)
-        if pygame.mouse.get_pos()[0] < 0 and pygame.mouse.get_pos()[1] > self.window.get_height():
-            self.source.position = (0, self.window.get_height())
-        if pygame.mouse.get_pos()[0] < 0 and pygame.mouse.get_pos()[1] < 0:
-            self.source.position = (0, 0)
-
-        # Updated limits - optimize a bit further before replacing it with this
-        # _positionLimitX = min(max(pygame.mouse.get_pos()[0], 0), self.window.get_width())
-        # _positionLimitY = min(max(pygame.mouse.get_pos()[1], 0), self.window.get_height())
-        # self.source.position = (_positionLimitX, _positionLimitY)
+        # Set & clamp source position to mouse position
+        _mouseX, _mouseY = pygame.mouse.get_pos()
+        _windowX, _windowY = self.window.get_size()
+        _positionLimitX = min(max(_mouseX, 0), _windowX)
+        _positionLimitY = min(max(_mouseY, 0), _windowY)
+        self.source.position = (_positionLimitX, _positionLimitY)
 
         # Debug
         # print(pygame.mouse.get_pos())
