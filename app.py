@@ -1,36 +1,30 @@
 import pygame
+import math
 from obstacle import Obstacle
 from source_object import SourceObject
 from config import Config
-from side_panel import SidePanel
 
 
 # Application main
 class AppWindow():
     # Constructor
     def __init__(self, config):
-        # Config
         self.config = config
 
-        # Window
         pygame.init()
-        self.window = pygame.display.set_mode((self.config.windowWidth, self.config.windowHeight))
+        self.window = pygame.display.set_mode((640, 460))
         self.clock = pygame.time.Clock()
         self.running = True
 
-        # Init var
         self.isDragging = False
 
         # Initialize Source
         self.sourcePosition = (300, 200)
         self.sourceRadius = 15
-        self.source = SourceObject(self.window, self.sourceRadius, self.sourcePosition, self.config)
+        self.source = SourceObject(self.window, self.sourceRadius, self.sourcePosition, config)
 
-        # Initialize Obstacles
+        # Initialize obstacles
         self.obstacles = [Obstacle(self.window, rect) for rect in self.config.obstacleDefinition]
-
-        # Initialize SidePanel
-        self.sidePanel = SidePanel(self.window, self.config)
 
         self.Run()
     
@@ -68,11 +62,9 @@ class AppWindow():
     def Dragging(self):
         # Set & clamp source position to mouse position
         _mouseX, _mouseY = pygame.mouse.get_pos()
-        _windowX, _windowY = (self.config.gameAreaWidth, self.config.gameAreaHeight)
-
+        _windowX, _windowY = self.window.get_size()
         _positionLimitX = min(max(_mouseX, 0), _windowX)
         _positionLimitY = min(max(_mouseY, 0), _windowY)
-        
         self.source.position = (_positionLimitX, _positionLimitY)
 
         # Debug
@@ -80,13 +72,11 @@ class AppWindow():
 
     # Rendering
     def Render(self):
-        self.window.fill(self.config.windowBackgroundColour)
+        self.window.fill("black")
 
         self.source.Render(self.obstacles)
 
         for obstacle in self.obstacles:
             obstacle.Render()
-
-        self.sidePanel.Render()
 
         pygame.display.flip()

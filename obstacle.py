@@ -5,8 +5,6 @@ import pygame
 class Obstacle():
     def __init__(self, root, positionArray):
         self.root = root
-        
-        # Config
         self.positionArray = positionArray
         self.rect = pygame.Rect(positionArray)
 

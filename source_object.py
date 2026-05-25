@@ -8,12 +8,9 @@ class SourceObject():
         self.config = config
         # Root
         self.window = window
-
         # Circle var
         self.circleRadius = circleRadius
-        self.circleColour = self.config.sourceColour
         self.position = position
-        
         # Ray var
         self.rayAmount = self.config.rayAmount
         self.rayLength = self.config.rayLength
@@ -24,7 +21,7 @@ class SourceObject():
         self.DrawCircle()
         self.DrawRays(obstacles)
 
-        pygame.draw.circle(self.window, self.circleColour, self.position, self.circleRadius)
+        pygame.draw.circle(self.window, (0, 255, 0), self.position, self.circleRadius)
     
     # Circle for rays calculations
     def DrawCircle(self):
@@ -51,25 +48,17 @@ class SourceObject():
     # Detect & Process collision
     def CollisionDetection(self, obstacles, _newRayX, _newRayY): # still buged where it goes through 1 pixel
         _lastClipped = ()
-
         for _obstacle in obstacles:
             _newClipped = _obstacle.rect.clipline(self.circle.center, (_newRayX, _newRayY))
-
-            # If there is another clipped object
             if _newClipped:
                 _newClipped = _newClipped[0]
-
-                # If there wasn't any clipped object before || there was
                 if not _lastClipped:
                     _lastClipped = _newClipped
-
                 else:
                     _lastDistance = math.sqrt(((_lastClipped[0]-self.circle.center[0])**2)+((_lastClipped[1]-self.circle.center[1])**2))
                     _newDistance = math.sqrt(((_newClipped[0]-self.circle.center[0])**2)+((_newClipped[1]-self.circle.center[1])**2))
                     if _newDistance < _lastDistance:
                         _lastClipped = _newClipped
-
-        # If ray clipped any object | it didn't
         if _lastClipped:
             return _lastClipped
         else:
